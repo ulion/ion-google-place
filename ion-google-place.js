@@ -10,9 +10,7 @@ angular.module('ion-google-place', [])
         function($ionicTemplateLoader, $ionicBackdrop, $ionicPlatform, $q, $timeout, $rootScope, $document) {
             return {
                 require: '?ngModel',
-                restrict: 'E',
-                template: '<input type="text" readonly="readonly" class="ion-google-place" autocomplete="off">',
-                replace: true,
+                restrict: 'A',
                 scope: {
                     ngModel: '=?',
                     geocodeOptions: '=',
@@ -27,7 +25,10 @@ angular.module('ion-google-place', [])
 
                     scope.displayCurrentLocation = false;
                     scope.currentLocation = scope.currentLocation === "true"? true:false;
-                    
+                    element.attr('readonly', 'readonly');
+                    element.addClass('ion-google-place');
+                    element.attr('autocomplete', 'off');
+
                     if(!!navigator.geolocation && scope.currentLocation){
                         scope.displayCurrentLocation = true;
                     }
@@ -140,6 +141,9 @@ angular.module('ion-google-place', [])
                         var onClick = function(e){
                             e.preventDefault();
                             e.stopPropagation();
+
+                            if (element.prop('disabled'))
+                              return;
 
                             $ionicBackdrop.retain();
                             unbindBackButtonAction = $ionicPlatform.registerBackButtonAction(closeOnBackButton, 250);
